@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code Generator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</head>
+<body>
+    <h1>QR Code Generator</h1>
+    <input id="text-input" type="text" placeholder="Enter text">
+    <button id="generate-button">Generate QR Code</button>
+    <div id="qrcode"></div>
+
+
+    <script>
+        function formatDate(date) {
+            var year = date.getFullYear();
+            var month = ("0" + (date.getMonth() + 1)).slice(-2);
+            var day = ("0" + date.getDate()).slice(-2);
+            var hour = ("0" + date.getHours()).slice(-2);
+            var minute = ("0" + date.getMinutes()).slice(-2);
+            var second = ("0" + date.getSeconds()).slice(-2);
+            var millisecond = ("00" + date.getMilliseconds()).slice(-3);
+            return year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":" + second + "." + millisecond;
+        }
+
+        function generateQRCode() {
+            $('#qrcode').empty();
+            var text = $('#text-input').val();
+            var date = formatDate(new Date());
+            text = text.replace(/createTime=[^&]*/, 'createTime=' + date);
+            var qrcode = new QRCode("qrcode", {
+                text: text,
+                width: 128,
+                height: 128,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+
+        $('#generate-button').click(function() {
+            generateQRCode();
+            setInterval(generateQRCode, 5000);
+        });
+    </script>
+</body>
+</html>
