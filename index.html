@@ -21,9 +21,13 @@
     <h1>QR Code Generator</h1>
     <input id="text-input" type="text" placeholder="Enter text">
     <button id="generate-button">Generate QR Code</button>
+    <input id="time-shift" type="number" placeholder="Time shift (seconds)">
     <div id="qrcode"></div>
     <script>
-        function formatDate(date) {
+        // Function to format date to ISO 8601 format
+        // Shift is the number of seconds to shift the date
+        function formatDate(date, shift) {
+            date = new Date(date.getTime() + (shift || 0) * 1000);
             var year = date.getFullYear();
             var month = ("0" + (date.getMonth() + 1)).slice(-2);
             var day = ("0" + date.getDate()).slice(-2);
@@ -36,7 +40,7 @@
         function generateQRCode() {
             $('#qrcode').empty();
             var text = $('#text-input').val();
-            var date = formatDate(new Date());
+            var date = formatDate(new Date(), parseInt($('#time-shift').val()));
             var size = $('#qrcode').width();
             text = text.replace(/createTime=[^&]*/, 'createTime=' + date);
             var qrcode = new QRCode("qrcode", {
@@ -50,7 +54,7 @@
         }
         $('#generate-button').click(function() {
             generateQRCode();
-            setInterval(generateQRCode, 5000);
+            setInterval(generateQRCode, 500);
         });
     </script>
 </body>
